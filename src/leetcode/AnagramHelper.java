@@ -5,11 +5,11 @@ import java.util.Arrays;
 public class AnagramHelper {
 
     public static boolean isAnagram(String input, String anagram) {
-        char[] charsAnagram = anagram.toCharArray();
-        char[] charsInput = input.toCharArray();
-        Arrays.sort(charsAnagram);
-        Arrays.sort(charsInput);
+        char[] anagramCharacters = anagram.toCharArray();
+        char[] inputCharacters = input.toCharArray();
+        Arrays.sort(anagramCharacters);
+        Arrays.sort(inputCharacters);
 
-        return Arrays.equals(charsAnagram, charsInput);
+        return Arrays.equals(anagramCharacters, inputCharacters);
     }
 }
