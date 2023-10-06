@@ -1,6 +1,6 @@
-package homework.inheritance.polymorphism.geometricshape.model;
+package homework.polymorphism.geometricshape.model;
 
-import homework.inheritance.polymorphism.geometricshape.AreaCalculable;
+import homework.polymorphism.geometricshape.AreaCalculable;
 
 public class Square implements AreaCalculable {
 
