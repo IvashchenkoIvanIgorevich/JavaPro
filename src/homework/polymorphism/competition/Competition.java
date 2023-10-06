@@ -29,21 +29,21 @@ public class Competition {
     private List<Obstacle> processObstacles(Participant participant, List<Obstacle> obstacles) {
         List<Obstacle> overcomingResult = new ArrayList<>();
         for (Obstacle obstacle : obstacles) {
-            Obstacle copy = obstacle.copy(obstacle);
+            Obstacle obstacleCopy = obstacle.copy(obstacle);
 
             if (obstacle instanceof Wall) {
-                if (participant.jump(copy.getLength())) {
-                    copy.setOvercome(true);
+                if (participant.jump(obstacleCopy.getLength())) {
+                    obstacleCopy.setOvercome(true);
                 }
             } else if (obstacle instanceof Racetrack) {
-                if (participant.run(copy.getLength())) {
-                    copy.setOvercome(true);
+                if (participant.run(obstacleCopy.getLength())) {
+                    obstacleCopy.setOvercome(true);
                 }
             }
 
-            overcomingResult.add(copy);
+            overcomingResult.add(obstacleCopy);
 
-            if (!copy.isOvercome()) {
+            if (!obstacleCopy.isOvercome()) {
                 break;
             }
         }
