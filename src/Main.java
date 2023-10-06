@@ -1,8 +1,10 @@
 import homework.inheritance.Animal;
 import homework.inheritance.Running;
 import homework.inheritance.Swimming;
-import homework.inheritance.cat.Cat;
-import homework.inheritance.dog.Dog;
+import homework.inheritance.polymorphism.geometricshape.AreaCalculable;
+import homework.inheritance.polymorphism.geometricshape.model.Circle;
+import homework.inheritance.polymorphism.geometricshape.model.Square;
+import homework.inheritance.polymorphism.geometricshape.model.Triangle;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,18 +12,15 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        Dog bobik = new Dog("Bobik", 510, 10);
-        Dog sharik = new Dog("Sharik", 600, 9);
-        Dog black = new Dog("Black", 300, 15);
 
-        Cat jack = new Cat("Jack", 210);
-        Cat john = new Cat("John", 300);
-        Cat pushok = new Cat("Pushok", 100);
+        // Calculating area of figures
+        Circle circle = new Circle(3.456);
+        Square square = new Square(4.234);
+        Triangle triangle = new Triangle(23.123, 5.78);
 
-        List<Animal> animals = Arrays.asList(bobik, sharik, black, jack, john, pushok);
-
-        runningCompetition(animals, 500);
-        swimmingCompetition(animals, 10);
+        List<AreaCalculable> figures = Arrays.asList(circle, square, triangle);
+        double sumAreaFigures = figures.stream().mapToDouble(AreaCalculable::calculateArea).sum();
+        System.out.println("The total area of all geometric figures: " + sumAreaFigures);
     }
 
     private static void runningCompetition(List<Animal> animals, int distance) {
