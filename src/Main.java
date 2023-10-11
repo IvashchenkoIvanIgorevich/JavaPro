@@ -1,27 +1,75 @@
 import homework.inheritance.Animal;
 import homework.inheritance.Running;
 import homework.inheritance.Swimming;
-import homework.inheritance.cat.Cat;
-import homework.inheritance.dog.Dog;
+import homework.polymorphism.competition.Competition;
+import homework.polymorphism.competition.obstacle.Obstacle;
+import homework.polymorphism.competition.obstacle.Racetrack;
+import homework.polymorphism.competition.obstacle.Wall;
+import homework.polymorphism.competition.participant.Cat;
+import homework.polymorphism.competition.participant.Robot;
+import homework.polymorphism.competition.participant.Human;
+import homework.polymorphism.competition.participant.Participant;
+import homework.polymorphism.geometricshape.AreaCalculable;
+import homework.polymorphism.geometricshape.model.Circle;
+import homework.polymorphism.geometricshape.model.Square;
+import homework.polymorphism.geometricshape.model.Triangle;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
-        Dog bobik = new Dog("Bobik", 510, 10);
-        Dog sharik = new Dog("Sharik", 600, 9);
-        Dog black = new Dog("Black", 300, 15);
 
-        Cat jack = new Cat("Jack", 210);
-        Cat john = new Cat("John", 300);
-        Cat pushok = new Cat("Pushok", 100);
+        // Calculating area of figures
+        Circle circle = new Circle(3.456);
+        Square square = new Square(4.234);
+        Triangle triangle = new Triangle(23.123, 5.78);
 
-        List<Animal> animals = Arrays.asList(bobik, sharik, black, jack, john, pushok);
+        List<AreaCalculable> figures = Arrays.asList(circle, square, triangle);
+        double sumAreaFigures = figures.stream().mapToDouble(AreaCalculable::calculateArea).sum();
+        System.out.println("The total area of all geometric figures: " + sumAreaFigures);
 
-        runningCompetition(animals, 500);
-        swimmingCompetition(animals, 10);
+        // Competition
+        Human human = new Human("Harry Potter", 1200, 40);
+        Cat cat = new Cat("Minerva McGonagall", 300, 300);
+        Robot robot = new Robot("C-3PO", 1000, 1200);
+
+        Racetrack racetrack = new Racetrack("Forbidden Forest", 1000);
+        Wall wall = new Wall("Hogwarts", 300);
+
+        List<Participant> participants = Arrays.asList(human, cat, robot);
+        List<Obstacle> obstacles = Arrays.asList(racetrack, wall);
+
+        Competition competition = new Competition(participants, obstacles);
+        Map<Participant, List<Obstacle>> result = competition.start();
+
+        result.forEach((participant, challenges) -> {
+            challenges.forEach(obstacle -> {
+                StringBuilder report = new StringBuilder()
+                        .append("Participant ")
+                        .append(participant.getName())
+                        .append(" ");
+
+                if (obstacle.isOvercome()) {
+                    report.append("passed the obstacle ");
+                } else {
+                    report.append("did not pass the obstacle ");
+                }
+
+                report.append(obstacle.getName())
+                        .append(" at the distance ")
+                        .append(obstacle.getLength());
+
+                if (!obstacle.isOvercome()) {
+                    report.append(". Passed ")
+                            .append(participant.getPassedDistance());
+                }
+
+                System.out.println(report);
+            });
+        });
     }
 
     private static void runningCompetition(List<Animal> animals, int distance) {
