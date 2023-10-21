@@ -12,6 +12,6 @@ public class NumberHelper {
                 return true;
             }
         }
-        return sortedNumbers.size() != numbers.length;
+        return false;
     }
 }
