@@ -1,4 +1,4 @@
-import homework.io.PopularTOPWordStrategy;
+import homework.io.PopularWordStrategy;
 import homework.io.Parser;
 
 import java.io.BufferedWriter;
@@ -29,13 +29,13 @@ public class Main {
         }
 
         // find book location
-        Path bookLocated = Paths.get("src", bookTitle);
+        Path bookLocation = Paths.get("src", bookTitle);
         // create an analysis strategy for getting top and unique words
-        PopularTOPWordStrategy analysis = new PopularTOPWordStrategy(10);
+        PopularWordStrategy analysis = new PopularWordStrategy(10);
         // main parser which can implement different analysis strategy
         Parser parser = new Parser(analysis);
 
-        try (Stream<String> lines = Files.lines(bookLocated)) {
+        try (Stream<String> lines = Files.lines(bookLocation)) {
             // parse every line and analyze it
             parser.pars(lines);
         } catch (NoSuchFileException e) {

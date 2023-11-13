@@ -4,13 +4,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PopularTOPWordStrategy implements AnalysisStrategy {
+public class PopularWordStrategy implements AnalysisStrategy {
 
     private static final int WORD_LENGTH = 3;
     private final int top;
     private final Map<String, Integer> results;
 
-    public PopularTOPWordStrategy(int top) {
+    public PopularWordStrategy(int top) {
         this.results = new TreeMap<>();
         this.top = top;
     }
