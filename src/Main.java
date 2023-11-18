@@ -1,5 +1,4 @@
-import homework.io.PopularWordStrategy;
-import homework.io.Parser;
+import homework.io.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -8,54 +7,59 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Main {
 
+    private static final int TOP_WORDS = 10;
+    private static final int WORD_LENGTH = 2;
+    private static final String NAME_PREFIX = "_statistic.txt";
+    private static final String EXIT_BUTTON = "y";
+    private static final String SRC_DIRECTORY = "src";
+
     public static void main(String[] args) {
-        // Interaction with user
-        String bookTitle;
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Please enter the title of the book: ");
-            bookTitle = scanner.nextLine();
-            if (bookTitle.isEmpty()) {
-                System.out.println("It seems like you haven't entered anything. Bye!!!");
-                scanner.close();
-                return;
+
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
+
+        BookParser bookParser = new BookParser();
+        StatisticService service = new StatisticService();
+
+        while (!exit) {
+
+            System.out.print(Messages.PLEASE_ENTER_FILE_NAME);
+            Path bookLocation = Paths.get(SRC_DIRECTORY, scanner.nextLine());
+            List<String> text;
+            try (Stream<String> lines = Files.lines(bookLocation)) {
+                text = bookParser.getWords(lines, WORD_LENGTH);
+            } catch (NoSuchFileException e) {
+                System.err.println(Messages.FILE_NOT_FOUND);
+                continue;
+            } catch (IOException e) {
+                System.err.println(Messages.SMTH_GO_WRONG);
+                continue;
             }
-            System.out.println("You have entered: " + bookTitle + ". " +
-                    "The result of the analysis will be saved in a file with the exact same name.");
+
+            Map<String, Integer> topWords = service.getPopularWords(text, TOP_WORDS);
+            int uniqueWords = service.getUniqueWords(text);
+            Statistic statistic = new Statistic(topWords, uniqueWords);
+
+            String printableResults = statistic.toString();
+
+            Path resultLocated = Paths.get(SRC_DIRECTORY, bookLocation.getFileName() + NAME_PREFIX);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultLocated.toFile()))) {
+                writer.write(printableResults);
+            } catch (IOException e) {
+                System.err.println(Messages.FILE_NOT_SAVED);
+            } catch (Exception e) {
+                System.err.println(Messages.INTERNAL_ERROR);
+            }
+
+            System.out.println(printableResults);
+            System.out.println(Messages.EXIT);
+            exit = !scanner.next().equals(EXIT_BUTTON);
         }
-
-        // find book location
-        Path bookLocation = Paths.get("src", bookTitle);
-        // create an analysis strategy for getting top and unique words
-        PopularWordStrategy analysis = new PopularWordStrategy(10);
-        // main parser which can implement different analysis strategy
-        Parser parser = new Parser(analysis);
-
-        try (Stream<String> lines = Files.lines(bookLocation)) {
-            // parse every line and analyze it
-            parser.pars(lines);
-        } catch (NoSuchFileException e) {
-            System.out.println("The file named " + bookTitle + " could not be located.");
-        } catch (IOException e) {
-            System.out.println("Please get in touch with your administrator.");
-        }
-
-        String printableResults = analysis.getPrintableResults() + "\n" + "Total words: " + analysis.getUniqueWords();
-
-        // write result to the file
-        Path resultLocated = Paths.get("src", bookTitle + "_statistic.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultLocated.toFile()))) {
-            writer.write(printableResults + "\n" + analysis.getUniqueWords());
-        } catch (IOException e) {
-            System.out.println("The file could not be saved.");
-        } catch (Exception e) {
-            System.out.println("Please get in touch with your administrator.");
-        }
-
-        System.out.println(printableResults);
+        scanner.close();
     }
 }
