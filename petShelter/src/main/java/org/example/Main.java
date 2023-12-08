@@ -42,20 +42,20 @@ public class Main {
                         continue;
                     }
 
-                    PetService service = new PetServiceImp(shelter.getPets());
+                    PetService petService = new PetServiceImp(shelter.getPets());
 
                     if (Command.ADD.getAction().equals(input)) {
-                        Pet newPet = Menu.createPet(scanner);
-                        service.add(newPet);
+                        Pet generatedPet = Menu.createPet(scanner);
+                        petService.add(generatedPet);
                     }
 
                     if (Command.DELETE.getAction().equals(input)) {
                         String key = Menu.selectPetKey(scanner);
-                        service.delete(key);
+                        petService.delete(key);
                     }
 
                     if (Command.SHOW.getAction().equals(input)) {
-                        Menu.showPets(service.getAll());
+                        Menu.showPets(petService.getAll());
                     }
                 } catch (Exception e) {
                     System.out.println(e.getMessage());

@@ -1,6 +1,8 @@
 package org.example.service.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.exception.DeserializationException;
+import org.example.exception.SerializationException;
 import org.example.model.Shelter;
 
 import java.io.File;
@@ -19,25 +21,23 @@ public class PetSerializer {
         this.path = PATH + format;
     }
 
-    public void serialize(Shelter shelter) {
+    public void serialize(Shelter shelter) throws SerializationException {
         try {
           mapper.writeValue(new File(path), shelter);
         } catch (IOException e) {
-            System.err.println("Can't create file! Try one more time.");
+            throw new SerializationException("Can't create file! Try one more time.", e);
         }
     }
 
-    public Optional<Shelter> deserialize() {
+    public Optional<Shelter> deserialize() throws DeserializationException {
         try {
             File file = new File(path);
             if (file.exists()) {
                 return Optional.of(mapper.readValue(file, Shelter.class));
             }
             return Optional.empty();
-        } catch (NullPointerException e) {
-            return Optional.empty();
         } catch (IOException e) {
-            throw new RuntimeException("Can't get data from the file (" + path + "). File was not found or corrupted.");
+            throw new DeserializationException("Can't get data from the file (" + path + "). File was not found or corrupted.", e);
         }
     }
 }

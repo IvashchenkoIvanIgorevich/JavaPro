@@ -1,6 +1,8 @@
 package org.example.service.serializer;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.example.exception.DeserializationException;
+import org.example.exception.SerializationException;
 import org.example.model.Pet;
 import org.example.model.Shelter;
 import org.junit.Before;
@@ -26,12 +28,12 @@ public class PetSerializerTest {
     }
 
     @Test
-    public void serializeTest() {
+    public void serializeTest() throws SerializationException {
         petSerializer.serialize(shelter);
     }
 
     @Test
-    public void deserializeTest() {
+    public void deserializeTest() throws DeserializationException {
         Optional<Shelter> deserialize = petSerializer.deserialize();
         assertEquals(shelter, deserialize.orElse(null));
     }

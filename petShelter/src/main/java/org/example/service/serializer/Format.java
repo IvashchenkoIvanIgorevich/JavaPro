@@ -2,7 +2,9 @@ package org.example.service.serializer;
 
 public enum Format {
 
-    JSON(".json");
+    JSON(".json"),
+    XML(".xml"),
+    YAML(".yaml");
 
     private final String extension;
 
