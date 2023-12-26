@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.model.Game;
 import org.example.repository.dao.GameRepository;
+import org.example.repository.mapper.GameMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,14 +38,7 @@ public class GameRepositoryImpl implements GameRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
 
-            return Game.builder()
-                    .id(resultSet.getInt("id"))
-                    .name(resultSet.getString("name"))
-                    .description(resultSet.getString("description"))
-                    .rating(resultSet.getInt("rating"))
-                    .cost(resultSet.getInt("cost"))
-                    .release(resultSet.getDate("release"))
-                    .build();
+            return GameMapper.mapResultSetToGame(resultSet);
         } catch (SQLException e) {
             try {
                 connection.close();
@@ -56,7 +50,7 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     @Override
-    public List<Game> getGamesById(List<Integer> ids) {
+    public List<Game> getGamesByIds(List<Integer> ids) {
         if (ids == null || ids.isEmpty()) return new ArrayList<>();
 
         try {
@@ -71,14 +65,7 @@ public class GameRepositoryImpl implements GameRepository {
 
             List<Game> result = new ArrayList<>();
             while (resultSet.next()) {
-                Game game = Game.builder()
-                        .id(resultSet.getInt("id"))
-                        .name(resultSet.getString("name"))
-                        .description(resultSet.getString("description"))
-                        .rating(resultSet.getInt("rating"))
-                        .cost(resultSet.getInt("cost"))
-                        .release(resultSet.getDate("release"))
-                        .build();
+                Game game = GameMapper.mapResultSetToGame(resultSet);
                 result.add(game);
             }
 
@@ -113,14 +100,7 @@ public class GameRepositoryImpl implements GameRepository {
 
             List<Game> result = new ArrayList<>();
             while (resultSet.next()) {
-                Game game = Game.builder()
-                        .id(resultSet.getInt("id"))
-                        .name(resultSet.getString("name"))
-                        .description(resultSet.getString("description"))
-                        .rating(resultSet.getInt("rating"))
-                        .cost(resultSet.getInt("cost"))
-                        .release(resultSet.getDate("release"))
-                        .build();
+                Game game = GameMapper.mapResultSetToGame(resultSet);
                 result.add(game);
             }
 

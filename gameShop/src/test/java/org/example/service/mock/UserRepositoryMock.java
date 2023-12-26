@@ -1,5 +1,6 @@
 package org.example.service.mock;
 
+import org.example.AppData;
 import org.example.model.User;
 import org.example.repository.dao.UserRepository;
 
@@ -34,7 +35,8 @@ public class UserRepositoryMock implements UserRepository {
 
     @Override
     public void updateDeposit(int userId, int amount) {
-
+        User user = AppData.getInstance().getUser();
+        user.setAmount(amount);
     }
 
     @Override

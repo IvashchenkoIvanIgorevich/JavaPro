@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.AppData;
 import org.example.model.User;
 import org.example.repository.dao.UserRepository;
+import org.example.repository.mapper.UserMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -57,13 +58,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return User.builder()
-                        .id(resultSet.getInt("id"))
-                        .nickname(resultSet.getString("nickname"))
-                        .password(resultSet.getString("password"))
-                        .birthday(resultSet.getDate("birthday"))
-                        .amount(resultSet.getInt("amount"))
-                        .build();
+                return UserMapper.mapResultSetToUser(resultSet);
             }
             return null;
         } catch (SQLException e) {
@@ -135,13 +130,7 @@ public class UserRepositoryImpl implements UserRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                User user = User.builder()
-                        .id(resultSet.getInt("id"))
-                        .nickname(resultSet.getString("nickname"))
-                        .password(resultSet.getString("password"))
-                        .birthday(resultSet.getDate("birthday"))
-                        .amount(resultSet.getInt("amount"))
-                        .build();
+                User user = UserMapper.mapResultSetToUser(resultSet);
                 AppData.getInstance().setUser(user);
             }
         } catch (SQLException e) {

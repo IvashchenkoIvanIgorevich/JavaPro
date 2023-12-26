@@ -16,11 +16,11 @@ public class GameRepositoryMock implements GameRepository {
 
     @Override
     public Game getGameById(int id) {
-        return games.get(1);
+        return games.get(id);
     }
 
     @Override
-    public List<Game> getGamesById(List<Integer> ids) {
+    public List<Game> getGamesByIds(List<Integer> ids) {
         return games.stream().filter(g -> ids.contains(g.getId())).collect(Collectors.toList());
     }
 

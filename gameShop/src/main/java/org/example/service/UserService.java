@@ -25,10 +25,10 @@ public class UserService {
             throw new IllegalArgumentException("Can't find user");
         }
 
-        authorization(user);
+        authorize(user);
     }
 
-    private static void authorization(User user) {
+    private static void authorize(User user) {
         User currectUser = AppData.getInstance().getUser();
         if (currectUser == null || currectUser.getId() != user.getId()) {
             AppData.getInstance().setUser(user);

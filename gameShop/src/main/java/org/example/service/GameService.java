@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GameService {
 
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
     public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;

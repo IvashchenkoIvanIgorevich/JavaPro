@@ -8,7 +8,7 @@ public interface GameRepository {
 
     Game getGameById(int id);
 
-    List<Game> getGamesById(List<Integer> ids);
+    List<Game> getGamesByIds(List<Integer> ids);
 
     List<Game> getAllGames();
 }

@@ -26,7 +26,7 @@ public class UserDataService {
 
         List<Integer> currentUserGameIds = userRepository.getUserGameIds(currentUser.getId());
 
-        return gameRepository.getGamesById(currentUserGameIds);
+        return gameRepository.getGamesByIds(currentUserGameIds);
     }
 
     public void addGame(int gameId) {
@@ -42,6 +42,11 @@ public class UserDataService {
 
         userRepository.addGame(gameId, currentUser.getId());
 
-        currentUser.setAmount(currentUser.getAmount() - game.getCost());
+        int updatedAmount = currentUser.getAmount() - game.getCost();
+        userRepository.updateDeposit(currentUser.getId(), updatedAmount);
+
+        User user = userRepository.get(currentUser.getNickname(), currentUser.getPassword());
+
+        AppData.getInstance().setUser(user);
     }
 }

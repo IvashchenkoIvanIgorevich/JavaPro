@@ -56,12 +56,12 @@ public class UserDataServiceTest {
 
     @Test
     public void testAddGame() {
-        User currentUser = User.builder().id(1).nickname("nickname").amount(100).build();
+        User currentUser = User.builder().id(1).nickname("user1").password("111").amount(100).build();
         AppData.getInstance().setUser(currentUser);
 
         userDataService.addGame(2);
 
-        int expectedAmount = 70;
+        int expectedAmount = 60;
         assertEquals(expectedAmount, currentUser.getAmount());
     }
 
