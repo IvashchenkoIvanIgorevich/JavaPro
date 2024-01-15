@@ -21,7 +21,8 @@ feedback.
 - **Version:** 42.6.0
 
 ### 2. Project Lombok
-- **Description:** Library that helps reduce boilerplate code by providing annotations to generate getters, setters, constructors, and more.
+- **Description:** Library that helps reduce boilerplate code by providing annotations to generate getters, setters, 
+constructors, and more.
 - **Artifact ID:** lombok
 - **Group ID:** org.projectlombok
 - **Version:** 1.18.30
@@ -47,4 +48,4 @@ feedback.
 - **Group ID:** com.fasterxml.jackson.core
 - **Version:** 2.16.0
 
-<!-- Add dependencies before this comment -->
+<!-- Add new dependencies before this comment -->
