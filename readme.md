@@ -46,3 +46,5 @@ feedback.
 - **Artifact ID:** jackson-databind
 - **Group ID:** com.fasterxml.jackson.core
 - **Version:** 2.16.0
+
+<!-- Add dependencies before this comment -->
