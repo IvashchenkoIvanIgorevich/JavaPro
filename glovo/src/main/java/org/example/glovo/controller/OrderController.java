@@ -1,6 +1,7 @@
 package org.example.glovo.controller;
 
 import lombok.AllArgsConstructor;
+import org.example.glovo.exception.OrderNotFoundException;
 import org.example.glovo.model.Order;
 import org.example.glovo.model.Product;
 import org.example.glovo.service.OrderService;
@@ -23,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Order getById(@PathVariable String id) {
+    public Order getById(@PathVariable Long id) {
         return orderService.getById(id);
     }
 
@@ -42,7 +43,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/products")
-    public Order addProduct(@PathVariable String id, @RequestBody Product product) {
+    public Order addProduct(@PathVariable Long id, @RequestBody Product product) {
         try {
             return orderService.addProduct(id, product);
         } catch (Exception ex) {
@@ -51,7 +52,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{orderId}/products/{productId}")
-    public Order addProduct(@PathVariable String orderId, @PathVariable String productId) {
+    public Order addProduct(@PathVariable Long orderId, @PathVariable Long productId) {
         try {
             return orderService.addProduct(orderId, productId);
         } catch (Exception ex) {
@@ -60,7 +61,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}/products/{productId}")
-    public boolean deleteProduct(@PathVariable String orderId, @PathVariable String productId) {
+    public boolean deleteProduct(@PathVariable Long orderId, @PathVariable Long productId) {
         try {
             return orderService.deleteProduct(orderId, productId);
         } catch (Exception ex) {
@@ -69,7 +70,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public Order delete(@PathVariable String id) {
+    public Order delete(@PathVariable Long id) throws OrderNotFoundException {
         return orderService.delete(id);
     }
 }

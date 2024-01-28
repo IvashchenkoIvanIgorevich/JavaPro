@@ -1,30 +1,25 @@
 package org.example.glovo.service;
 
 import lombok.AllArgsConstructor;
+import org.example.glovo.entity.ProductEntity;
 import org.example.glovo.exception.ProductNotFoundException;
+import org.example.glovo.mapper.ProductMapper;
 import org.example.glovo.model.Product;
+import org.example.glovo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class ProductService {
 
-    private List<Product> products;
+    private ProductRepository productRepository;
 
-    public Product add(Product product) {
-        product.setId(Integer.toString(products.size()));
-        products.add(product);
-        return product;
+    public ProductEntity add(Product product) {
+        return productRepository.save(ProductMapper.toEntity(product));
     }
 
-    public Product getById(String id) throws ProductNotFoundException {
-        Product product = products.get(Integer.parseInt(id));
-        if (product == null) {
-            throw new ProductNotFoundException("Product not found");
-        }
-
-        return product;
+    public ProductEntity getById(Long id) throws ProductNotFoundException {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
     }
 }

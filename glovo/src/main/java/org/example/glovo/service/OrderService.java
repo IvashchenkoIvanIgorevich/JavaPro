@@ -1,110 +1,124 @@
 package org.example.glovo.service;
 
 import lombok.AllArgsConstructor;
+import org.example.glovo.entity.OrderEntity;
+import org.example.glovo.entity.ProductEntity;
 import org.example.glovo.exception.OrderNotFoundException;
 import org.example.glovo.exception.ProductNotFoundException;
+import org.example.glovo.mapper.OrderMapper;
 import org.example.glovo.model.Order;
 import org.example.glovo.model.Product;
+import org.example.glovo.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class OrderService {
 
-    private List<Order> orders;
+    private OrderRepository orderRepository;
     private ProductService productService;
 
     public List<Order> getAll() {
-        return orders;
+        Iterable<OrderEntity> allOrdersEntity = orderRepository.findAll();
+
+        List<Order> allOrders = new ArrayList<>();
+        for (OrderEntity orderEntity : allOrdersEntity) {
+            allOrders.add(OrderMapper.toModel(orderEntity));
+        }
+
+        return allOrders;
     }
 
     public Order add(Order order) {
-        order.setId(Integer.toString(orders.size()));
-        orders.add(order);
-        return order;
+        OrderEntity newOrderEntity = OrderMapper.toEntity(order);
+
+        OrderEntity savedOrderEntity = orderRepository.save(newOrderEntity);
+
+        return OrderMapper.toModel(savedOrderEntity);
     }
 
     public Order update(Order order) throws OrderNotFoundException {
-        if (order.getId() == null || order.getId().isEmpty() || order.getId().isBlank()) {
+        if (order.getId() == null) {
             throw new IllegalArgumentException("Order id is a required argument");
         }
 
-        Order currentOrder = orders.get(Integer.parseInt(order.getId()));
-        if (currentOrder == null) {
-            throw new OrderNotFoundException("Order not found");
-        }
+        orderRepository.findById(order.getId())
+                .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
-        currentOrder.setQuantity(order.getQuantity());
-        currentOrder.setModification(new Date());
-        currentOrder.setTotalPrice(order.getTotalPrice());
-        currentOrder.setProducts(order.getProducts());
+        OrderEntity updateOrderEntity = orderRepository.save(OrderMapper.toEntity(order));
 
-        return currentOrder;
+        return OrderMapper.toModel(updateOrderEntity);
     }
 
-    public Order getById(String id) {
-        if (id == null || id.isEmpty() || id.isBlank()) {
+    public Order getById(Long id) {
+        if (id == null) {
             throw new IllegalArgumentException("Order not found");
         }
 
-        return orders.get(Integer.parseInt(id));
+        OrderEntity foundOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
+        return OrderMapper.toModel(foundOrder);
     }
 
-    public Order addProduct(String id, Product product) throws OrderNotFoundException {
-        if (id == null || id.isEmpty() || id.isBlank()) {
+    public Order addProduct(Long id, Product product) throws OrderNotFoundException {
+        if (id == null) {
             throw new IllegalArgumentException("Order id is a required argument");
         }
 
-        Order currentOrder = orders.get(Integer.parseInt(id));
-        if (currentOrder == null) {
-            throw new OrderNotFoundException("Order not found");
-        }
+        OrderEntity foundOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
-        Product createdProduct = productService.add(product);
-        currentOrder.getProducts().add(createdProduct);
+        ProductEntity addedProductEntity = productService.add(product);
+        foundOrder.getProducts().add(addedProductEntity);
 
-        return currentOrder;
+        OrderEntity updateOrderEntity = orderRepository.save(foundOrder);
+
+        return OrderMapper.toModel(updateOrderEntity);
     }
 
-    public Order addProduct(String orderId, String productId) throws OrderNotFoundException, ProductNotFoundException {
-        if (orderId == null || orderId.isEmpty() || orderId.isBlank()) {
+    public Order addProduct(Long orderId, Long productId) throws OrderNotFoundException, ProductNotFoundException {
+        if (orderId == null) {
             throw new IllegalArgumentException("Order id is a required argument");
         }
 
-        Order currentOrder = orders.get(Integer.parseInt(orderId));
-        if (currentOrder == null) {
-            throw new OrderNotFoundException("Order not found");
-        }
+        OrderEntity foundOrder = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
-        Product existingProduct = productService.getById(productId);
-        currentOrder.getProducts().add(existingProduct);
+        ProductEntity existingProductEntity = productService.getById(productId);
+        foundOrder.getProducts().add(existingProductEntity);
 
-        return currentOrder;
+        OrderEntity updatedOrderEntity = orderRepository.save(foundOrder);
+
+        return OrderMapper.toModel(updatedOrderEntity);
     }
 
-    public boolean deleteProduct(String orderId, String productId) throws OrderNotFoundException, ProductNotFoundException {
-        if (orderId == null || orderId.isEmpty() || orderId.isBlank()) {
+    public boolean deleteProduct(Long orderId, Long productId) throws OrderNotFoundException, ProductNotFoundException {
+        if (orderId == null) {
             throw new IllegalArgumentException("Order id is a required argument");
         }
 
-        Order currentOrder = orders.get(Integer.parseInt(orderId));
-        if (currentOrder == null) {
-            throw new OrderNotFoundException("Order not found");
-        }
+        OrderEntity foundOrder = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
-        Product existingProduct = productService.getById(productId);
+        ProductEntity existingProductEntity = productService.getById(productId);
+        foundOrder.getProducts().remove(existingProductEntity);
 
-        return currentOrder.getProducts().remove(existingProduct);
+        orderRepository.save(foundOrder);
+
+        return true;
     }
 
-    public Order delete(String id) {
-        if (id == null || id.isEmpty() || id.isBlank()) {
+    public Order delete(Long id) throws OrderNotFoundException {
+        if (id == null) {
             throw new IllegalArgumentException("Order id is a required argument");
         }
 
-        return orders.remove(Integer.parseInt(id));
+        OrderEntity foundOrder = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        orderRepository.delete(foundOrder);
+
+        return OrderMapper.toModel(foundOrder);
     }
 }

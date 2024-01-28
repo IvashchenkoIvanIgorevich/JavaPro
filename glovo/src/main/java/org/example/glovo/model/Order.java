@@ -8,13 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Builder
 @AllArgsConstructor
+@Builder
 public class Order {
 
-    private String id;
+    private Long id;
     private List<Product> products;
-    private int totalPrice;
+    private int price;
     private int quantity;
     private Date creation;
     private Date modification;
