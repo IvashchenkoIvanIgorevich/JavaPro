@@ -16,6 +16,6 @@ public class HelloWorldServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter out = response.getWriter();
-        out.println("Hello World1213!");
+        out.println("Hello, World!");
     }
 }
