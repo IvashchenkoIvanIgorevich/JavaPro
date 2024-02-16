@@ -24,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Order getById(@PathVariable Long id) {
+    public Order getById(@PathVariable Long id) throws OrderNotFoundException {
         return orderService.getById(id);
     }
 

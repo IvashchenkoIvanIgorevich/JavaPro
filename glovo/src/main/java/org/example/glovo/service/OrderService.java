@@ -53,13 +53,13 @@ public class OrderService {
         return OrderMapper.toModel(updateOrderEntity);
     }
 
-    public Order getById(Long id) {
+    public Order getById(Long id) throws OrderNotFoundException {
         if (id == null) {
             throw new IllegalArgumentException("Order not found");
         }
 
         OrderEntity foundOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+                .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
         return OrderMapper.toModel(foundOrder);
     }
