@@ -41,11 +41,11 @@ jobs:
           cache: maven
 
     unit-test:
-      - name: Unit Tests
-        run: mvn -B test --file pom.xml
+      name: Unit Tests
+      run: mvn -B test --file pom.xml
     build:
-      - name: Build with Maven
-        run: mvn clean install
+      name: Build with Maven
+      run: mvn clean install
 
   set-up-docker-to-region:
     name: Set up Docker to region
