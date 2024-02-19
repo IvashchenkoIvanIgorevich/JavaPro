@@ -40,6 +40,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+    unit-test:
+      - name: Unit Tests
+        run: mvn -B test --file pom.xml
+    build:
       - name: Build with Maven
         run: mvn clean install
 
