@@ -15,7 +15,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  authenticate-to-gcp:
+  Authenticate to Google Cloud:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-  build-with-maven:
+  Build with Maven:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,7 +44,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-  setup-docker:
+  Set up Docker to region:
     needs: authenticate-to-gcp
     runs-on: ubuntu-latest
 
@@ -59,7 +59,7 @@ jobs:
           push: true
           tags: europe-west1-docker.pkg.dev/devrate-dev/dev-rate-service/dev-rate:latest
 
-  deploy-to-gcp-vm:
+  Deploy to GCP VM:
     needs: authenticate-to-gcp
     runs-on: ubuntu-latest
 
