@@ -49,7 +49,7 @@ jobs:
       - name: Compile
         run: mvn compile
 
-      - name: Tests
+      - name: Test
         run: mvn test
 
       - name: Package
